@@ -104,10 +104,10 @@ const passwordConfig = {
     const collections = [specialChars, numericChars, lowerChars, upperChars]; // Array of collections needed to iterate through
 
     var updatedCollection = [];
-    collections.forEach(collection => {
-        if(collection.selected === true) {
-            updatedCollection.push(collection);
-        }
+    collections.forEach((collection) => {
+      if (collection.selected === true) {
+        updatedCollection.push(collection);
+      }
     });
     this.configuredCollection = updatedCollection;
   },
@@ -131,57 +131,53 @@ const passwordConfig = {
 
 // Random number generator
 const getRandomInt = (min, max) => {
-    min = Math.ceil(min);
-    max = Math.ceil(max);
-    return Math.floor(Math.random() * (max - min + 1) + min);
+  min = Math.ceil(min);
+  max = Math.ceil(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 // Run Durstenfeld shuffle algorithm on array
-const shuffleArray = array => {
-    for (let i = array.length -1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        const temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
 
-    return array;
+  return array;
 };
 
 // The following function is used to generate a password
 const generatePassword = () => {
-    // Collection needs to be configured based on collection selection
-    passwordConfig.configureCollection();
+  // Collection needs to be configured based on collection selection
+  passwordConfig.configureCollection();
 
-    const generatedPasswordString = [];
-    let currentCollection = 0;
+  const generatedPasswordString = [];
+  let currentCollection = 0;
 
-    // Generate characters that will be in password based on collection
-    while ( generatedPasswordString.length < passwordConfig.passwordLength ) {
+  // Generate characters that will be in password based on collection
+  while (generatedPasswordString.length < passwordConfig.passwordLength) {
+    // Alternate through each configured collection during each iteration
+    const rand = getRandomInt(
+      0,
+      passwordConfig.configuredCollection[currentCollection].content.length - 1
+    );
+    generatedPasswordString.push(
+      passwordConfig.configuredCollection[currentCollection].content[rand]
+    );
 
-        // Alternate through each configured collection during each iteration
-        const rand = getRandomInt(0, (passwordConfig.configuredCollection[currentCollection].content.length - 1));
-        generatedPasswordString.push(passwordConfig.configuredCollection[currentCollection].content[rand]);
-
-        // Move on to the next collection
-        if (currentCollection < passwordConfig.configuredCollection.length - 1) {
-            currentCollection++;
-        } else {
-            currentCollection = 0;
-        }
+    // Move on to the next collection
+    if (currentCollection < passwordConfig.configuredCollection.length - 1) {
+      currentCollection++;
+    } else {
+      currentCollection = 0;
     }
+  }
 
-    // Run shuffling algorithm on generatedPasswordString
-    shuffleArray(generatedPasswordString);
+  // Run shuffling algorithm on generatedPasswordString
+  shuffleArray(generatedPasswordString);
 
-    // Return generated password array as a string
-    return generatedPasswordString.join("");
+  // Return generated password array as a string
+  return generatedPasswordString.join("");
 };
-
-// Main Program
-
-// Configure selected collections
-passwordConfig.configureCollection();
-
-// Return generated password
-return generatePassword();
