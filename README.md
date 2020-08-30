@@ -38,6 +38,28 @@ Please visit the [site](http://www.harishnarain.com/coding-bootcamp-hw-03/) host
 ## Screenshot
 ![Screenshot 1](https://github.com/harishnarain/coding-bootcamp-hw-03/blob/master/Screenshot1.png)
 
+## Algorithm used
+1. Make each unicode character set it's own JavaScript object called a collection that maintains it's state (selected or not) and it's content (characters used).
+2. Based on the selection, the appropriate collections will be pushed into an available collection set.
+3. When a password is generated:
+	* Alternate through each collection when generating characters in password
+	* Run a Durstenfeld shuffling algorithm after generating the password
+
+Durstenfeld shuffling algorithm is an optimized version of the Fisher-Yates shuffling algorithm and has a O(n) linear time complexity. Here is the algorithm implemented in JavaScript:
+```javascript
+// Run Durstenfeld shuffle algorithm on array
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+
+  return array;
+};
+```
+
 ## License
 Due to the nature of this exercise, no license has been included.
 
